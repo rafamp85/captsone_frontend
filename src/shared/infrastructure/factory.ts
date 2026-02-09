@@ -25,9 +25,4 @@ export class Factory {
   static createHealthUseCase(): HealthUseCase {
     return new HealthUseCase(this.getHealthRepository());
   }
-
-  static reset(): void {
-    this.httpClient = null;
-    this.healthRepository = null;
-  }
 }
