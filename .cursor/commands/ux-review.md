@@ -4,8 +4,28 @@ Visual UX review using browser MCP to navigate, screenshot, and evaluate UI.
 
 ## Prerequisites
 
-- Dev server running (`npm start` in terminal)
-- Browser MCP already configured (cursor-browser-extension tools available)
+- Backend and Frontend servers running
+- Browser MCP already configured (playwright tools available)
+
+## How to Start Servers
+
+### Backend (Terminal 1)
+```bash
+cd /Users/miguelghz/WebstormProjects/software-crafters/backend-template
+npm start
+```
+Default URL: `http://localhost:8080`
+
+### Frontend (Terminal 2)
+```bash
+npm start
+```
+Default URL: `http://localhost:4200`
+
+## Test Credentials
+
+- **Email**: `test@example.com`
+- **OTP Code**: Check backend terminal output after requesting code
 
 ## Browser MCP Tools Available
 
@@ -19,9 +39,10 @@ Visual UX review using browser MCP to navigate, screenshot, and evaluate UI.
 
 ## Steps
 
-1. **Verify server is running**:
+1. **Verify servers are running**:
+   - Check terminal logs for active backend server
    - Check terminal logs for active Vite server
-   - Default URL: `http://localhost:5173`
+   - Frontend URL: `http://localhost:4200`
 
 2. **Navigate and capture screenshots**:
    - Use `browser_navigate` to go to each page
@@ -35,7 +56,7 @@ Visual UX review using browser MCP to navigate, screenshot, and evaluate UI.
    ```
 
 4. **For each screen, evaluate**:
-   - Layout and spacing consistency
+   - Layout and spacing consistency and symmetry
    - Typography hierarchy
    - Color contrast and theme (light/dark)
    - Interactive elements (buttons, inputs, links)
@@ -51,7 +72,7 @@ Visual UX review using browser MCP to navigate, screenshot, and evaluate UI.
 ## Example Flow
 
 ```
-1. browser_navigate → http://localhost:5173
+1. browser_navigate → http://localhost:4200
 2. browser_take_screenshot → 01-landing.png
 3. browser_snapshot → get element refs
 4. browser_click → main CTA button ref
@@ -79,4 +100,3 @@ Visual UX review using browser MCP to navigate, screenshot, and evaluate UI.
 - [ ] Animation smoothness
 - [ ] Keyboard navigation (Escape to close modals)
 - [ ] Mobile responsiveness (use browser_resize)
-

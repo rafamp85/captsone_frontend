@@ -38,10 +38,10 @@ test.describe('The Health Status Page', () => {
     await expect(page.getByText('● healthy')).toBeVisible();
   });
 
-  test('navigates to health page from root', async ({ page }) => {
+  test('navigates to login page from root', async ({ page }) => {
     await page.goto(Routes.Home);
-    await expect(page).toHaveURL(Routes.Health);
-    await expect(page.getByRole('heading', { name: 'System Health' })).toBeVisible();
+    await expect(page).toHaveURL(Routes.Login);
+    await expect(page.getByRole('heading', { name: 'Iniciar sesión' })).toBeVisible();
   });
 });
 
