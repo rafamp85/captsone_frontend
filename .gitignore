@@ -1,4 +1,7 @@
 node_modules
+.maestro
+.cerebro
+.playwright-mcp
 lib
 .idea
 coverage
