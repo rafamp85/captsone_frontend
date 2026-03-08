@@ -1,6 +1,9 @@
 /** @type {import('jest').Config} */
 export default {
   testEnvironment: 'jsdom',
+  testEnvironmentOptions: {
+    customExportConditions: ['', 'browser', 'development'],
+  },
   roots: ['<rootDir>/src'],
   testMatch: ['**/*.test.ts', '**/*.test.tsx'],
   testPathIgnorePatterns: ['/node_modules/', '/dist/', '\\.spec\\.ts$'],
