@@ -1,3 +1,10 @@
+---
+description: Full project validator. Use proactively after code changes to compile, lint, format, and run all tests.
+tools: Read, Glob, Bash, Edit
+isolation: worktree
+model: sonet
+---
+
 # Validate Agent
 
 Run full project validation. Auto-fix formatting and lint issues. Report remaining errors.

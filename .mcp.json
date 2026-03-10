@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "/bin/zsh",
+      "args": ["-c", "source ~/.nvm/nvm.sh && nvm use 22 && npm run mcp:playwright"]
+    },
+    "context7": {
+      "command": "/bin/zsh",
+      "args": ["-c", "source ~/.nvm/nvm.sh && nvm use 22 && npm run mcp:context7"]
+    }
+  }
+}

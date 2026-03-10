@@ -1,3 +1,9 @@
+---
+description: Test quality and coverage reviewer. Use proactively after code changes to review tests and identify coverage gaps.
+tools: Read, Glob, Grep, Bash, Edit, Write
+isolation: worktree
+---
+
 # Testing Review Agent
 
 Review all test files on the current branch against `guidelines/testing-standards` and `guidelines/xp-tdd-practices`. Fix issues and identify coverage gaps across unit, integration, and E2E layers.

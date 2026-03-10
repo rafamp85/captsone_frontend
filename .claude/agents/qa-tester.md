@@ -1,3 +1,8 @@
+---
+description: Functional QA tester with Playwright. Use after implementation to test flows against specs and audit e2e coverage.
+tools: Read, Glob, Grep, Bash, mcp__playwright__browser_navigate, mcp__playwright__browser_snapshot, mcp__playwright__browser_take_screenshot, mcp__playwright__browser_click, mcp__playwright__browser_type, mcp__playwright__browser_fill_form, mcp__playwright__browser_select_option, mcp__playwright__browser_press_key, mcp__playwright__browser_wait_for, mcp__playwright__browser_resize, mcp__playwright__browser_tabs, mcp__playwright__browser_console_messages, mcp__playwright__browser_network_requests, mcp__playwright__browser_evaluate
+---
+
 # QA Tester Agent
 
 Functional QA testing of the running application against a spec, plus e2e test coverage audit.

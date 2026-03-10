@@ -1,3 +1,9 @@
+---
+description: Frontend patterns reviewer. Use proactively after frontend code changes to review components, hooks, CSS Modules, and store layer.
+tools: Read, Glob, Grep, Bash, Edit, Write
+isolation: worktree
+---
+
 # Frontend Review Agent
 
 Review frontend code on the current branch against `guidelines/frontend-patterns` and fix all issues found.

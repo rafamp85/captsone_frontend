@@ -1,3 +1,9 @@
+---
+description: Hexagonal architecture compliance reviewer. Use proactively after code changes to check layer boundaries and dependencies.
+tools: Read, Glob, Grep, Bash, Edit, Write
+isolation: worktree
+---
+
 # Architecture Review Agent
 
 Review code on the current branch against `guidelines/architecture-hexagonal` and fix all architecture violations.

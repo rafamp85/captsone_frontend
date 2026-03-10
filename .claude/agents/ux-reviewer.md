@@ -1,3 +1,8 @@
+---
+description: Visual UX reviewer using Playwright. Use after implementation to evaluate UI against UX best practices.
+tools: Read, Glob, Bash, mcp__playwright__browser_navigate, mcp__playwright__browser_snapshot, mcp__playwright__browser_take_screenshot, mcp__playwright__browser_click, mcp__playwright__browser_type, mcp__playwright__browser_wait_for, mcp__playwright__browser_resize, mcp__playwright__browser_tabs
+---
+
 # UX Review Agent
 
 Visual UX review of the running application using browser MCP tools.
