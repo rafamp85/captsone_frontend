@@ -13,33 +13,52 @@ function stubProfilePort(): ProfilePort & { updatedWith: { name: string; email: 
 }
 
 describe('The Profile Update', () => {
-  it('updates name and email via port', async () => {
+  it('persists the updated name and email', async () => {
     const profilePort = stubProfilePort();
     const useCase = new UpdateProfileUseCase(profilePort);
 
     const result = await useCase.execute('Jane Doe', 'jane@example.com');
 
-    expect(result).toEqual({ success: true });
+    expect(result.success).toBe(true);
+    expect(result.message).toBeUndefined();
     expect(profilePort.updatedWith).toEqual({ name: 'Jane Doe', email: 'jane@example.com' });
   });
 
-  it('fails with invalid name', async () => {
+  it('rejects an invalid name', async () => {
     const profilePort = stubProfilePort();
     const useCase = new UpdateProfileUseCase(profilePort);
 
     const result = await useCase.execute('A', 'jane@example.com');
 
-    expect(result).toEqual({ success: false, message: 'Name must be between 2 and 100 characters' });
+    expect(result.success).toBe(false);
+    expect(result.message).toBe('Name must be between 2 and 100 characters');
     expect(profilePort.updatedWith).toBeNull();
   });
 
-  it('fails with invalid email', async () => {
+  it('rejects an invalid email', async () => {
     const profilePort = stubProfilePort();
     const useCase = new UpdateProfileUseCase(profilePort);
 
     const result = await useCase.execute('Jane Doe', 'invalid-email');
 
-    expect(result).toEqual({ success: false, message: 'Invalid email format' });
+    expect(result.success).toBe(false);
+    expect(result.message).toBe('Invalid email format');
     expect(profilePort.updatedWith).toBeNull();
+  });
+
+  it('reports an error when the profile service is unavailable', async () => {
+    const stub = {
+      updatedWith: null as { name: string; email: string } | null,
+      getProfile: async () => ({ name: 'John Doe', email: 'john@example.com' }),
+      updateProfile: async () => {
+        throw new Error('Service unavailable');
+      },
+    };
+    const useCase = new UpdateProfileUseCase(stub);
+
+    const result = await useCase.execute('Jane Doe', 'jane@example.com');
+
+    expect(result.success).toBe(false);
+    expect(result.message).toBe('Service unavailable');
   });
 });

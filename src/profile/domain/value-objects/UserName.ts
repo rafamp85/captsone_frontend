@@ -10,4 +10,12 @@ export class UserName {
     }
     return new UserName(trimmed);
   }
+
+  equals(other: UserName): boolean {
+    return this.value === other.value;
+  }
+
+  toPrimitives(): string {
+    return this.value;
+  }
 }

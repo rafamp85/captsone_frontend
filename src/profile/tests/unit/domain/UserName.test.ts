@@ -26,4 +26,24 @@ describe('The UserName', () => {
 
     expect(userName.value).toBe('John Doe');
   });
+
+  it('considers two user names with the same value as equal', () => {
+    const userName = UserName.create('John Doe');
+    const other = UserName.create('John Doe');
+
+    expect(userName.equals(other)).toBe(true);
+  });
+
+  it('considers two user names with different values as not equal', () => {
+    const userName = UserName.create('John Doe');
+    const other = UserName.create('Jane Doe');
+
+    expect(userName.equals(other)).toBe(false);
+  });
+
+  it('converts to primitives', () => {
+    const userName = UserName.create('John Doe');
+
+    expect(userName.toPrimitives()).toBe('John Doe');
+  });
 });

@@ -1,11 +1,5 @@
 import { ProfilePort } from './ports/ProfilePort';
-import { ProfileDTO } from './ProfileDTO';
-
-export interface GetProfileResultDTO {
-  success: boolean;
-  profile?: ProfileDTO;
-  message?: string;
-}
+import { GetProfileResultDTO } from './ProfileDTO';
 
 export class GetProfileUseCase {
   constructor(private readonly profilePort: ProfilePort) {}

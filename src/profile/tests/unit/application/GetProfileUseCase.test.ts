@@ -19,22 +19,26 @@ function stubFailingProfilePort(errorMessage: string): ProfilePort {
 }
 
 describe('The Profile Retrieval', () => {
-  it('returns the user profile', async () => {
+  it('retrieves the user profile successfully', async () => {
     const profile: ProfileDTO = { name: 'John Doe', email: 'john@example.com' };
     const profilePort = stubProfilePort(profile);
     const useCase = new GetProfileUseCase(profilePort);
 
     const result = await useCase.execute();
 
-    expect(result).toEqual({ success: true, profile });
+    expect(result.success).toBe(true);
+    expect(result.profile).toEqual(profile);
+    expect(result.message).toBeUndefined();
   });
 
-  it('returns error when profile retrieval fails', async () => {
+  it('reports an error when the profile cannot be retrieved', async () => {
     const profilePort = stubFailingProfilePort('Network error');
     const useCase = new GetProfileUseCase(profilePort);
 
     const result = await useCase.execute();
 
-    expect(result).toEqual({ success: false, message: 'Network error' });
+    expect(result.success).toBe(false);
+    expect(result.message).toBe('Network error');
+    expect(result.profile).toBeUndefined();
   });
 });

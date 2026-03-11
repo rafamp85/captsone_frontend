@@ -1,11 +1,7 @@
 import { ProfilePort } from './ports/ProfilePort';
+import { UpdateProfileResultDTO } from './ProfileDTO';
 import { UserName } from '../domain/value-objects/UserName';
 import { Email } from '../../auth/domain/value-objects/Email';
-
-export interface UpdateProfileResultDTO {
-  success: boolean;
-  message?: string;
-}
 
 export class UpdateProfileUseCase {
   constructor(private readonly profilePort: ProfilePort) {}

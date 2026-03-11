@@ -60,7 +60,7 @@ function renderProfile(deps: ProfileDeps) {
 describe('The Profile Page', () => {
   const profile: ProfileDTO = { name: 'John Doe', email: 'john@example.com' };
 
-  it('indicates loading while fetching profile', async () => {
+  it('shows a loading message while fetching the profile', async () => {
     const deps = createDeps(stubProfilePort(profile));
 
     renderProfile(deps);
@@ -72,7 +72,7 @@ describe('The Profile Page', () => {
     });
   });
 
-  it('displays the user name and email', async () => {
+  it('presents the user name and email once loaded', async () => {
     const deps = createDeps(stubProfilePort(profile));
 
     renderProfile(deps);
@@ -83,7 +83,7 @@ describe('The Profile Page', () => {
     });
   });
 
-  it('shows error when profile loading fails', async () => {
+  it('presents an error when the profile cannot be loaded', async () => {
     const deps = createDeps(stubFailingProfilePort('Connection refused'));
 
     renderProfile(deps);
@@ -93,7 +93,7 @@ describe('The Profile Page', () => {
     });
   });
 
-  it('submits updated profile data', async () => {
+  it('saves the edited profile data', async () => {
     const user = userEvent.setup();
     let updatedData: { name: string; email: string } | null = null;
     const profilePort: ProfilePort = {
@@ -122,7 +122,7 @@ describe('The Profile Page', () => {
     });
   });
 
-  it('renders a logout button', async () => {
+  it('offers a logout option', async () => {
     const deps = createDeps(stubProfilePort(profile));
 
     renderProfile(deps);

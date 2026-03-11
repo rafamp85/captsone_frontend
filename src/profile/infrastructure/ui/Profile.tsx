@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useProfile } from './Profile.hook';
 import { GetProfileUseCase } from '../../application/GetProfileUseCase';
 import { UpdateProfileUseCase } from '../../application/UpdateProfileUseCase';
 import { LogoutUseCase } from '../../application/LogoutUseCase';
+import { Maybe } from '../../../shared/domain/Maybe';
 import { Factory } from '../../../shared/infrastructure/factory';
 import { Routes } from '../../../shared/infrastructure/ui/routes';
 import styles from './Profile.module.css';
@@ -28,68 +29,60 @@ interface Props {
 }
 
 export function Profile(props: Props) {
-  const hook = useProfile(props);
+  const profileState = useProfile(props);
 
   useEffect(() => {
-    hook.loadProfile();
+    profileState.loadProfile();
   }, []);
 
-  if (hook.loggedOut) {
+  if (profileState.loggedOut) {
     return <Navigate to={Routes.Login} replace />;
   }
 
-  if (hook.error.isSome()) {
-    return (
+  return profileState.error.fold(
+    () =>
+      profileState.profile.fold(
+        () => (
+          <div className={styles.container}>
+            <div className={styles.loading}>Loading profile...</div>
+          </div>
+        ),
+        () => (
+          <ProfileForm
+            editName={profileState.editName}
+            editEmail={profileState.editEmail}
+            updateError={profileState.updateError}
+            onChangeName={profileState.changeEditName}
+            onChangeEmail={profileState.changeEditEmail}
+            onSave={profileState.updateProfile}
+            onLogout={profileState.logout}
+          />
+        )
+      ),
+    (errorMessage) => (
       <div className={styles.container}>
         <div className={styles.card}>
-          <div className={styles.error}>{hook.error.getOrThrow()}</div>
+          <div className={styles.error}>{errorMessage}</div>
         </div>
       </div>
-    );
-  }
-
-  if (hook.loading || hook.profile.isNone()) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.loading}>Loading profile...</div>
-      </div>
-    );
-  }
-
-  return (
-    <ProfileForm
-      name={hook.profile.getOrThrow().name}
-      email={hook.profile.getOrThrow().email}
-      updateError={hook.updateError.fold(
-        () => null,
-        (msg) => msg
-      )}
-      onSave={hook.updateProfile}
-      onLogout={hook.logout}
-    />
+    )
   );
 }
 
 interface FormProps {
-  name: string;
-  email: string;
-  updateError: string | null;
-  onSave: (name: string, email: string) => Promise<void>;
+  editName: string;
+  editEmail: string;
+  updateError: Maybe<string>;
+  onChangeName: (name: string) => void;
+  onChangeEmail: (email: string) => void;
+  onSave: () => Promise<void>;
   onLogout: () => void;
 }
 
 function ProfileForm(props: FormProps) {
-  const [name, setName] = useState(props.name);
-  const [email, setEmail] = useState(props.email);
-
-  useEffect(() => {
-    setName(props.name);
-    setEmail(props.email);
-  }, [props.name, props.email]);
-
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    props.onSave(name, email);
+    props.onSave();
   };
 
   return (
@@ -104,8 +97,8 @@ function ProfileForm(props: FormProps) {
             <input
               id="profile-name"
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={props.editName}
+              onChange={(e) => props.onChangeName(e.target.value)}
               className={styles.input}
             />
           </div>
@@ -116,12 +109,17 @@ function ProfileForm(props: FormProps) {
             <input
               id="profile-email"
               type="text"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={props.editEmail}
+              onChange={(e) => props.onChangeEmail(e.target.value)}
               className={styles.input}
             />
           </div>
-          {props.updateError && <div className={styles.error}>{props.updateError}</div>}
+          {props.updateError.fold(
+            () => null,
+            (message) => (
+              <div className={styles.error}>{message}</div>
+            )
+          )}
           <button type="submit" className={styles.saveButton}>
             Save
           </button>

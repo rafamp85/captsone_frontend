@@ -44,7 +44,7 @@ function createHookDeps(profilePort: ProfilePort, tokenPort?: TokenPort) {
 describe('The Profile Hook', () => {
   const profile: ProfileDTO = { name: 'John Doe', email: 'john@example.com' };
 
-  it('initializes with no data and idle state', () => {
+  it('starts with no profile data and idle state', () => {
     const deps = createHookDeps(stubProfilePort(profile));
 
     const { result } = renderHook(() => useProfile(deps));
@@ -54,7 +54,7 @@ describe('The Profile Hook', () => {
     expect(result.current.error.isNone()).toBe(true);
   });
 
-  it('loads profile data when requested', async () => {
+  it('provides the profile data after loading', async () => {
     const deps = createHookDeps(stubProfilePort(profile));
     const { result } = renderHook(() => useProfile(deps));
 
@@ -67,7 +67,7 @@ describe('The Profile Hook', () => {
     expect(result.current.loading).toBe(false);
   });
 
-  it('captures error when profile loading fails', async () => {
+  it('exposes the error when profile loading fails', async () => {
     const deps = createHookDeps(stubFailingProfilePort('Network error'));
     const { result } = renderHook(() => useProfile(deps));
 
@@ -80,7 +80,7 @@ describe('The Profile Hook', () => {
     expect(result.current.loading).toBe(false);
   });
 
-  it('updates profile and reloads data', async () => {
+  it('refreshes profile data after a successful update', async () => {
     const updatedProfile: ProfileDTO = { name: 'Jane Doe', email: 'jane@example.com' };
     let callCount = 0;
     const profilePort: ProfilePort = {
@@ -98,26 +98,36 @@ describe('The Profile Hook', () => {
     });
     expect(result.current.profile.getOrThrow()).toEqual(profile);
 
+    act(() => {
+      result.current.changeEditName('Jane Doe');
+      result.current.changeEditEmail('jane@example.com');
+    });
+
     await act(async () => {
-      await result.current.updateProfile('Jane Doe', 'jane@example.com');
+      await result.current.updateProfile();
     });
 
     expect(result.current.profile.getOrThrow()).toEqual(updatedProfile);
   });
 
-  it('captures update error message', async () => {
+  it('exposes the validation error on failed update', async () => {
     const deps = createHookDeps(stubProfilePort(profile));
     const { result } = renderHook(() => useProfile(deps));
 
+    act(() => {
+      result.current.changeEditName('A');
+      result.current.changeEditEmail('jane@example.com');
+    });
+
     await act(async () => {
-      await result.current.updateProfile('A', 'jane@example.com');
+      await result.current.updateProfile();
     });
 
     expect(result.current.updateError.isSome()).toBe(true);
     expect(result.current.updateError.getOrThrow()).toBe('Name must be between 2 and 100 characters');
   });
 
-  it('signals logout when executed', async () => {
+  it('marks the user as logged out after logout', async () => {
     const tokenPort = stubTokenPort();
     const deps = createHookDeps(stubProfilePort(profile), tokenPort);
     const { result } = renderHook(() => useProfile(deps));

@@ -17,6 +17,8 @@ interface ProfileState {
   error: Maybe<string>;
   updateError: Maybe<string>;
   loggedOut: boolean;
+  editName: string;
+  editEmail: string;
 }
 
 const initialState: ProfileState = {
@@ -25,6 +27,8 @@ const initialState: ProfileState = {
   error: Maybe.none(),
   updateError: Maybe.none(),
   loggedOut: false,
+  editName: '',
+  editEmail: '',
 };
 
 export function useProfile(deps: ProfileDeps) {
@@ -34,20 +38,34 @@ export function useProfile(deps: ProfileDeps) {
     setState((prev) => ({ ...prev, loading: true, error: Maybe.none() }));
     const result = await deps.getProfileUseCase.execute();
     if (result.success && result.profile) {
-      setState((prev) => ({ ...prev, profile: Maybe.some(result.profile!), loading: false }));
+      setState((prev) => ({
+        ...prev,
+        profile: Maybe.some(result.profile!),
+        editName: result.profile!.name,
+        editEmail: result.profile!.email,
+        loading: false,
+      }));
     } else {
-      setState((prev) => ({ ...prev, error: Maybe.some(result.message || 'Unknown error'), loading: false }));
+      setState((prev) => ({ ...prev, error: Maybe.some(result.message ?? 'Unknown error'), loading: false }));
     }
   };
 
-  const updateProfile = async (name: string, email: string) => {
+  const updateProfile = async () => {
     setState((prev) => ({ ...prev, updateError: Maybe.none() }));
-    const result = await deps.updateProfileUseCase.execute(name, email);
+    const result = await deps.updateProfileUseCase.execute(state.editName, state.editEmail);
     if (result.success) {
       await loadProfile();
     } else {
-      setState((prev) => ({ ...prev, updateError: Maybe.some(result.message || 'Unknown error') }));
+      setState((prev) => ({ ...prev, updateError: Maybe.some(result.message ?? 'Unknown error') }));
     }
+  };
+
+  const changeEditName = (name: string) => {
+    setState((prev) => ({ ...prev, editName: name }));
+  };
+
+  const changeEditEmail = (email: string) => {
+    setState((prev) => ({ ...prev, editEmail: email }));
   };
 
   const logout = () => {
@@ -61,8 +79,12 @@ export function useProfile(deps: ProfileDeps) {
     error: state.error,
     updateError: state.updateError,
     loggedOut: state.loggedOut,
+    editName: state.editName,
+    editEmail: state.editEmail,
     loadProfile,
     updateProfile,
+    changeEditName,
+    changeEditEmail,
     logout,
   };
 }
