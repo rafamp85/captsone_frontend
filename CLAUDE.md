@@ -87,7 +87,7 @@ src/
 
 ### Actions (interactive practices)
 
-- `/action-plan` — Create a TDD development plan for a feature
+- `/action-plan` — Create a TDD plan, save to Notion backlog, implement, and track progress
 - `/action-tdd` — Enforce TDD cycle or TPP when being skipped
 - `/action-refactor` — Refactor code, tests, rename, or frontend patterns
 
