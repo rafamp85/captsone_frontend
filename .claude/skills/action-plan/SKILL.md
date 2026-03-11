@@ -59,7 +59,7 @@ Brief description of what needs to be built.
 
 ## Spec Context (auto-approve)
 
-When called from `/command-spec implement`, the requirement and tasks are already defined in the spec's How section. In this case:
+When called from `/action-spec implement`, the requirement and tasks are already defined in the spec's How section. In this case:
 
 1. Read the spec section content (passed as context)
 2. Read the codebase to understand existing patterns
