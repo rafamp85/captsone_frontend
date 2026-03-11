@@ -3,7 +3,7 @@ import { HealthContainer } from '../../../health/infrastructure/ui/Health';
 import { LoginContainer } from '../../../auth/infrastructure/ui/Login';
 import { VerifyOtpContainer } from '../../../auth/infrastructure/ui/VerifyOtp';
 import { ProtectedRoute } from './ProtectedRoute';
-import { ProfilePlaceholder } from './ProfilePlaceholder';
+import { ProfileContainer } from '../../../profile/infrastructure/ui/Profile';
 import { Factory } from '../factory';
 import { Routes as AppRoutes } from './routes';
 
@@ -20,7 +20,7 @@ export function App() {
           path={AppRoutes.Profile}
           element={
             <ProtectedRoute tokenPort={tokenPort}>
-              <ProfilePlaceholder />
+              <ProfileContainer />
             </ProtectedRoute>
           }
         />

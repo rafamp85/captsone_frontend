@@ -8,6 +8,11 @@ import { AuthPort } from '../../auth/application/ports/AuthPort';
 import { HttpAuthAdapter } from '../../auth/infrastructure/adapters/HttpAuthAdapter';
 import { RequestOtpUseCase } from '../../auth/application/RequestOtpUseCase';
 import { VerifyOtpUseCase } from '../../auth/application/VerifyOtpUseCase';
+import { ProfilePort } from '../../profile/application/ports/ProfilePort';
+import { HttpProfileAdapter } from '../../profile/infrastructure/adapters/HttpProfileAdapter';
+import { GetProfileUseCase } from '../../profile/application/GetProfileUseCase';
+import { UpdateProfileUseCase } from '../../profile/application/UpdateProfileUseCase';
+import { LogoutUseCase } from '../../profile/application/LogoutUseCase';
 
 export class Factory {
   private static readonly apiBaseUrl = import.meta.env.VITE_API_URL || '/api';
@@ -15,6 +20,7 @@ export class Factory {
   private static healthRepository?: HealthRepository;
   private static tokenPort?: TokenPort;
   private static authPort?: AuthPort;
+  private static profilePort?: ProfilePort;
 
   static getHttpClient(): HttpClient {
     if (!this.httpClient) {
@@ -54,5 +60,24 @@ export class Factory {
 
   static createVerifyOtpUseCase(): VerifyOtpUseCase {
     return new VerifyOtpUseCase(this.getAuthPort(), this.getTokenPort());
+  }
+
+  static getProfilePort(): ProfilePort {
+    if (!this.profilePort) {
+      this.profilePort = new HttpProfileAdapter(this.getHttpClient());
+    }
+    return this.profilePort;
+  }
+
+  static createGetProfileUseCase(): GetProfileUseCase {
+    return new GetProfileUseCase(this.getProfilePort());
+  }
+
+  static createUpdateProfileUseCase(): UpdateProfileUseCase {
+    return new UpdateProfileUseCase(this.getProfilePort());
+  }
+
+  static createLogoutUseCase(): LogoutUseCase {
+    return new LogoutUseCase(this.getTokenPort());
   }
 }
