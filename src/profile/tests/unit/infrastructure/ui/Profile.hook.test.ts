@@ -81,7 +81,7 @@ describe('The Profile Hook', () => {
   });
 
   it('refreshes profile data after a successful update', async () => {
-    const updatedProfile: ProfileDTO = { name: 'Jane Doe', email: 'jane@example.com' };
+    const updatedProfile: ProfileDTO = { name: 'Jane Doe', email: 'john@example.com' };
     let callCount = 0;
     const profilePort: ProfilePort = {
       getProfile: async () => {
@@ -100,7 +100,6 @@ describe('The Profile Hook', () => {
 
     act(() => {
       result.current.changeEditName('Jane Doe');
-      result.current.changeEditEmail('jane@example.com');
     });
 
     await act(async () => {
@@ -116,7 +115,6 @@ describe('The Profile Hook', () => {
 
     act(() => {
       result.current.changeEditName('A');
-      result.current.changeEditEmail('jane@example.com');
     });
 
     await act(async () => {

@@ -18,7 +18,6 @@ interface ProfileState {
   updateError: Maybe<string>;
   loggedOut: boolean;
   editName: string;
-  editEmail: string;
 }
 
 const initialState: ProfileState = {
@@ -28,7 +27,6 @@ const initialState: ProfileState = {
   updateError: Maybe.none(),
   loggedOut: false,
   editName: '',
-  editEmail: '',
 };
 
 export function useProfile(deps: ProfileDeps) {
@@ -42,7 +40,6 @@ export function useProfile(deps: ProfileDeps) {
         ...prev,
         profile: Maybe.some(result.profile!),
         editName: result.profile!.name,
-        editEmail: result.profile!.email,
         loading: false,
       }));
     } else {
@@ -52,7 +49,7 @@ export function useProfile(deps: ProfileDeps) {
 
   const updateProfile = async () => {
     setState((prev) => ({ ...prev, updateError: Maybe.none() }));
-    const result = await deps.updateProfileUseCase.execute(state.editName, state.editEmail);
+    const result = await deps.updateProfileUseCase.execute(state.editName);
     if (result.success) {
       await loadProfile();
     } else {
@@ -62,10 +59,6 @@ export function useProfile(deps: ProfileDeps) {
 
   const changeEditName = (name: string) => {
     setState((prev) => ({ ...prev, editName: name }));
-  };
-
-  const changeEditEmail = (email: string) => {
-    setState((prev) => ({ ...prev, editEmail: email }));
   };
 
   const logout = () => {
@@ -80,11 +73,9 @@ export function useProfile(deps: ProfileDeps) {
     updateError: state.updateError,
     loggedOut: state.loggedOut,
     editName: state.editName,
-    editEmail: state.editEmail,
     loadProfile,
     updateProfile,
     changeEditName,
-    changeEditEmail,
     logout,
   };
 }

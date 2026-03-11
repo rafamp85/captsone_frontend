@@ -64,7 +64,7 @@ export class Factory {
 
   static getProfilePort(): ProfilePort {
     if (!this.profilePort) {
-      this.profilePort = new HttpProfileAdapter(this.getHttpClient());
+      this.profilePort = new HttpProfileAdapter(this.getHttpClient(), this.getTokenPort());
     }
     return this.profilePort;
   }

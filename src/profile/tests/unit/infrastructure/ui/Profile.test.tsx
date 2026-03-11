@@ -72,34 +72,37 @@ describe('The Profile Page', () => {
     });
   });
 
-  it('presents the user name and email once loaded', async () => {
+  it('presents the user name as editable and email as read-only', async () => {
     const deps = createDeps(stubProfilePort(profile));
 
     renderProfile(deps);
 
     await waitFor(() => {
-      expect(screen.getByDisplayValue('John Doe')).toBeInTheDocument();
-      expect(screen.getByDisplayValue('john@example.com')).toBeInTheDocument();
+      const nameInput = screen.getByDisplayValue('John Doe');
+      const emailInput = screen.getByDisplayValue('john@example.com');
+      expect(nameInput).not.toHaveAttribute('readOnly');
+      expect(emailInput).toHaveAttribute('readOnly');
     });
   });
 
-  it('presents an error when the profile cannot be loaded', async () => {
+  it('presents an error with a retry option when the profile cannot be loaded', async () => {
     const deps = createDeps(stubFailingProfilePort('Connection refused'));
 
     renderProfile(deps);
 
     await waitFor(() => {
       expect(screen.getByText('Connection refused')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Retry' })).toBeInTheDocument();
     });
   });
 
-  it('saves the edited profile data', async () => {
+  it('saves the edited name', async () => {
     const user = userEvent.setup();
-    let updatedData: { name: string; email: string } | null = null;
+    let updatedName: string | null = null;
     const profilePort: ProfilePort = {
       getProfile: async () => profile,
-      updateProfile: async (name: string, email: string) => {
-        updatedData = { name, email };
+      updateProfile: async (name: string) => {
+        updatedName = name;
       },
     };
     const deps = createDeps(profilePort);
@@ -118,7 +121,7 @@ describe('The Profile Page', () => {
     await user.click(saveButton);
 
     await waitFor(() => {
-      expect(updatedData).toEqual({ name: 'Jane Doe', email: 'john@example.com' });
+      expect(updatedName).toBe('Jane Doe');
     });
   });
 

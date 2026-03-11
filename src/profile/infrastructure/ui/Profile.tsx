@@ -47,13 +47,12 @@ export function Profile(props: Props) {
             <div className={styles.loading}>Loading profile...</div>
           </div>
         ),
-        () => (
+        (profile) => (
           <ProfileForm
             editName={profileState.editName}
-            editEmail={profileState.editEmail}
+            email={profile.email}
             updateError={profileState.updateError}
             onChangeName={profileState.changeEditName}
-            onChangeEmail={profileState.changeEditEmail}
             onSave={profileState.updateProfile}
             onLogout={profileState.logout}
           />
@@ -63,6 +62,9 @@ export function Profile(props: Props) {
       <div className={styles.container}>
         <div className={styles.card}>
           <div className={styles.error}>{errorMessage}</div>
+          <button className={styles.retryButton} onClick={profileState.loadProfile}>
+            Retry
+          </button>
         </div>
       </div>
     )
@@ -71,10 +73,9 @@ export function Profile(props: Props) {
 
 interface FormProps {
   editName: string;
-  editEmail: string;
+  email: string;
   updateError: Maybe<string>;
   onChangeName: (name: string) => void;
-  onChangeEmail: (email: string) => void;
   onSave: () => Promise<void>;
   onLogout: () => void;
 }
@@ -108,10 +109,10 @@ function ProfileForm(props: FormProps) {
             </label>
             <input
               id="profile-email"
-              type="text"
-              value={props.editEmail}
-              onChange={(e) => props.onChangeEmail(e.target.value)}
-              className={styles.input}
+              type="email"
+              value={props.email}
+              readOnly
+              className={`${styles.input} ${styles.inputReadonly}`}
             />
           </div>
           {props.updateError.fold(
