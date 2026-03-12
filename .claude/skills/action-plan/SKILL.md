@@ -12,7 +12,7 @@ Create a TDD development plan, save it to the Notion backlog, and track implemen
 ## Notion Backlog
 
 - **Database:** "Frontend Template - Backlog"
-- **Data source ID:** `e35bcad8-334c-481a-8bc6-6d6b14f73340`
+- **Data source ID:** `<your-data-source-id>`
 - **Properties:** Feature (title), Status (pending/in_progress/done), Dependencies, Git (commit strategy), Branch, Base, Priority, Plan ID (auto, prefix PLAN)
 
 ## Usage
@@ -67,7 +67,7 @@ Display the full plan. The user can approve, request changes, or cancel. No need
 ### Step 5: Save to Notion
 
 Create a page in the Notion backlog using `mcp__notion__notion-create-pages` with:
-- **Parent:** `{"data_source_id": "e35bcad8-334c-481a-8bc6-6d6b14f73340"}`
+- **Parent:** `{"data_source_id": "<your-data-source-id>"}`
 - **Properties:** Feature (title), Status, Git, Branch, Dependencies, Priority
 - **Content:** The plan in Notion markdown format:
 
